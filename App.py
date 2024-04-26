@@ -38,7 +38,7 @@ class NLPApp:
         self.password_input = Entry(self.root, width=30, show='*')
         self.password_input.pack(pady=(5, 10))
 
-        login_button = Button(self.root, text='login', width=20, height=1)
+        login_button = Button(self.root, text='login', width=20, height=1, command=self.perform_login)
         login_button.pack(pady=(10, 10))
 
         label3 = Label(self.root, text='Not a Member?', bg='#93879c', fg='white')
@@ -87,10 +87,6 @@ class NLPApp:
         redirect_button = Button(self.root, text='Login Now', width=16, height=1, command=self.login_gui)
         redirect_button.pack(pady=(10, 10))
 
-    def clear(self):
-        for i in self.root.pack_slaves():
-            print(i.destroy())
-
     def perform_regist(self):
         name = self.name_input.get()
         email = self.email_input.get()
@@ -100,6 +96,19 @@ class NLPApp:
             messagebox.showinfo('success', 'Registration successful !')
         else:
             messagebox.showerror('Error', 'Email already exists')
+
+    def perform_login(self):
+        email = self.email_input.get()
+        password = self.password_input.get()
+        response = self.dbo.search(email, password)
+        if response:
+            messagebox.showinfo('success', 'login successful')
+        else:
+            messagebox.showerror('error', 'login failed')
+
+    def clear(self):
+        for i in self.root.pack_slaves():
+            i.destroy()
 
 
 nlp = NLPApp()
