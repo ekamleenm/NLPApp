@@ -1,8 +1,11 @@
 from tkinter import *
+from mydb import Database
 
 
 class NLPApp:
     def __init__(self):
+        # create object of database class
+        self.dbo = Database()
         # we load GUI first
         self.root = Tk()
         self.root.title('NLPApp')
@@ -14,7 +17,6 @@ class NLPApp:
         self.root.mainloop()
 
     def login_gui(self):
-
         self.clear()
 
         heading = Label(self.root, text='NLPApp', bg='#93879c', fg='white')
@@ -74,7 +76,7 @@ class NLPApp:
         self.password_input = Entry(self.root, width=30, show='*')
         self.password_input.pack(pady=(5, 10))
 
-        login_button = Button(self.root, text='Register', width=20, height=1)
+        login_button = Button(self.root, text='Register', width=20, height=1, command=self.perform_regist)
         login_button.pack(pady=(20, 10))
 
         label3 = Label(self.root, text='Already a Member?', bg='#93879c', fg='white')
@@ -87,6 +89,16 @@ class NLPApp:
     def clear(self):
         for i in self.root.pack_slaves():
             print(i.destroy())
+
+    def perform_regist(self):
+        name = self.name_input.get()
+        email = self.email_input.get()
+        password = self.password_input.get()
+        response = self.dbo.add_data(name, email, password)
+        if response == 1:
+            print('reg successful')
+        else:
+            print('email exists')
 
 
 nlp = NLPApp()
