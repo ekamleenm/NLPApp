@@ -1,12 +1,15 @@
 from tkinter import *
 from mydb import Database
 from tkinter import messagebox
+from functions import Functions
 
 
 class NLPApp:
     def __init__(self):
         # create object of database class
         self.dbo = Database()
+        # Object of Function class
+        self.func = Functions()
         # we load GUI first
         self.root = Tk()
         self.root.title('NLPApp')
@@ -103,12 +106,57 @@ class NLPApp:
         response = self.dbo.search(email, password)
         if response:
             messagebox.showinfo('success', 'login successful')
+            self.home_gui()
         else:
             messagebox.showerror('error', 'login failed')
 
     def clear(self):
         for i in self.root.pack_slaves():
             i.destroy()
+
+    def home_gui(self):
+        self.clear()
+        sentiment_button = Button(self.root, text='Sentiment Analysis', width=20, height=4, command=self.sentiment_gui)
+        sentiment_button.pack(pady=(20, 10))
+
+        NER_button = Button(self.root, text='NER', width=20, height=4, command=self.NER_gui)
+        NER_button.pack(pady=(20, 10))
+
+        emotion_button = Button(self.root, text='Emotion Prediction', width=20, height=4, command=self.emotion_gui)
+        emotion_button.pack(pady=(20, 10))
+
+        logout_button = Button(self.root, text='LOGOUT', width=10, height=2, command=self.login_gui)
+        logout_button.pack(pady=(20, 10))
+
+    def sentiment_gui(self):
+        self.clear()
+        heading = Label(self.root, text='Sentiment Analysis', bg='#93879c', fg='white')
+        heading.pack(pady=(30, 30))
+        heading.configure(font=('verdana', 24, 'bold'))
+
+        label0 = Label(self.root, text='Enter text ', bg='#93879c', fg='white')
+        label0.pack(pady=(10, 10))
+        label0.configure(font=('verdana', 17, 'bold'))
+
+    def NER_gui(self):
+        self.clear()
+        heading = Label(self.root, text='NER', bg='#93879c', fg='white')
+        heading.pack(pady=(30, 30))
+        heading.configure(font=('verdana', 24, 'bold'))
+
+        label0 = Label(self.root, text='Enter text ', bg='#93879c', fg='white')
+        label0.pack(pady=(10, 10))
+        label0.configure(font=('verdana', 17, 'bold'))
+
+    def emotion_gui(self):
+        self.clear()
+        heading = Label(self.root, text='Emotion Prediction', bg='#93879c', fg='white')
+        heading.pack(pady=(30, 30))
+        heading.configure(font=('verdana', 24, 'bold'))
+
+        label0 = Label(self.root, text='Enter text ', bg='#93879c', fg='white')
+        label0.pack(pady=(10, 10))
+        label0.configure(font=('verdana', 17, 'bold'))
 
 
 nlp = NLPApp()
