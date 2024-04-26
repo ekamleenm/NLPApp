@@ -89,5 +89,4 @@ class NLPApp:
             print(i.destroy())
 
 
-
 nlp = NLPApp()
