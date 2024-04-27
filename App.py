@@ -188,9 +188,21 @@ class NLPApp:
         heading.pack(pady=(10, 20))
         heading.configure(font=('verdana', 24, 'bold'))
 
-        label0 = Label(self.root, text='Enter text ', bg='#93879c', fg='white')
-        label0.pack(pady=(10, 10))
-        label0.configure(font=('verdana', 17, 'bold'))
+        self.emotion_text = Entry(self.root, width=30)
+        self.emotion_text.pack(pady=(5, 10))
+
+        self.emotion_searchkey = Entry(self.root, width=30)
+        self.emotion_searchkey.pack(pady=(5, 10))
+
+        emotion_button = Button(self.root, text='DO Emotion', width=10, height=2,
+                            command=self.do_NER)
+        emotion_button.pack(pady=(20, 10))
+        self.emotion_result = Label(self.root, text='', bg='#93879c')
+        self.emotion_result.pack(pady=(30, 30))
+        self.emotion_result.configure(font=('verdana', 14))
+
+        goBack_button = Button(self.root, text='Go Back', width=5, height=1, command=self.home_gui)
+        goBack_button.pack(pady=(20, 10))
 
     def do_senti_analysis(self):
         response = self.api_obj.sentiment_anlys(self.sentiment_text.get())
@@ -211,7 +223,9 @@ class NLPApp:
         self.NER_result['text'] = response
 
     def do_emotion(self):
-        pass
+        response = self.api_obj.lang_detection(self.emotion_text.get())
+        print(response)
+        self.emotion_result['text'] = response
 
 
 nlp = NLPApp()
