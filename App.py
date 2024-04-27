@@ -163,9 +163,21 @@ class NLPApp:
         heading.pack(pady=(10, 20))
         heading.configure(font=('verdana', 24, 'bold'))
 
-        label0 = Label(self.root, text='Enter text ', bg='#93879c', fg='white')
-        label0.pack(pady=(10, 10))
-        label0.configure(font=('verdana', 17, 'bold'))
+        self.NER_text = Entry(self.root, width=30)
+        self.NER_text.pack(pady=(5, 10))
+
+        self.NER_searchkey = Entry(self.root, width=30)
+        self.NER_searchkey.pack(pady=(5, 10))
+
+        NER_button = Button(self.root, text='DO NER', width=10, height=2,
+                            command=self.do_NER)
+        NER_button.pack(pady=(20, 10))
+        self.NER_result = Label(self.root, text='', bg='#93879c')
+        self.NER_result.pack(pady=(30, 30))
+        self.NER_result.configure(font=('verdana', 14))
+
+        goBack_button = Button(self.root, text='Go Back', width=5, height=1, command=self.home_gui)
+        goBack_button.pack(pady=(20, 10))
 
     def emotion_gui(self):
         self.clear()
@@ -188,10 +200,18 @@ class NLPApp:
             score = label_info['score']
             sentiment_analysis_results.append(f"{label}: {score:.6f}")
 
-    # Joining all results into a single string to display or use further
+        # Joining all results into a single string to display or use further
         results_string = "\n".join(sentiment_analysis_results)
         print(results_string)
         self.sentiment_result['text'] = results_string
+
+    def do_NER(self):
+        response = self.api_obj.ner(self.NER_text.get(), self.NER_searchkey.get())
+        print(response)
+        self.NER_result['text'] = response
+
+    def do_emotion(self):
+        pass
 
 
 nlp = NLPApp()
