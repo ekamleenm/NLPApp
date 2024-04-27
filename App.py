@@ -1,15 +1,15 @@
 from tkinter import *
 from mydb import Database
 from tkinter import messagebox
-from functions import Functions
+from myapi import My_API
 
 
 class NLPApp:
     def __init__(self):
         # create object of database class
         self.dbo = Database()
-        # Object of Function class
-        self.func = Functions()
+        # myapi class object
+        self.api_obj = My_API()
         # we load GUI first
         self.root = Tk()
         self.root.title('NLPApp')
@@ -130,18 +130,37 @@ class NLPApp:
 
     def sentiment_gui(self):
         self.clear()
+        heading = Label(self.root, text='NLPApp', bg='#93879c', fg='white')
+        heading.pack(pady=(10, 20))
+        heading.configure(font=('verdana', 24, 'bold'))
         heading = Label(self.root, text='Sentiment Analysis', bg='#93879c', fg='white')
-        heading.pack(pady=(30, 30))
+        heading.pack(pady=(10, 20))
         heading.configure(font=('verdana', 24, 'bold'))
 
-        label0 = Label(self.root, text='Enter text ', bg='#93879c', fg='white')
+        label0 = Label(self.root, text='Enter Text ', bg='#93879c', fg='white')
         label0.pack(pady=(10, 10))
         label0.configure(font=('verdana', 17, 'bold'))
 
+        self.sentiment_text = Entry(self.root, width=30)
+        self.sentiment_text.pack(pady=(5, 10))
+
+        senti_button = Button(self.root, text='Analyze', width=10, height=2,
+                              command=self.do_senti_analysis)
+        senti_button.pack(pady=(20, 10))
+        self.sentiment_result = Label(self.root, text='', bg='#93879c')
+        self.sentiment_result.pack(pady=(30, 30))
+        self.sentiment_result.configure(font=('verdana', 14))
+
+        goBack_button = Button(self.root, text='Go Back', width=5, height=1, command=self.home_gui)
+        goBack_button.pack(pady=(20, 10))
+
     def NER_gui(self):
         self.clear()
+        heading = Label(self.root, text='NLPApp', bg='#93879c', fg='white')
+        heading.pack(pady=(10, 20))
+        heading.configure(font=('verdana', 24, 'bold'))
         heading = Label(self.root, text='NER', bg='#93879c', fg='white')
-        heading.pack(pady=(30, 30))
+        heading.pack(pady=(10, 20))
         heading.configure(font=('verdana', 24, 'bold'))
 
         label0 = Label(self.root, text='Enter text ', bg='#93879c', fg='white')
@@ -150,13 +169,29 @@ class NLPApp:
 
     def emotion_gui(self):
         self.clear()
+        heading = Label(self.root, text='NLPApp', bg='#93879c', fg='white')
+        heading.pack(pady=(10, 20))
+        heading.configure(font=('verdana', 24, 'bold'))
         heading = Label(self.root, text='Emotion Prediction', bg='#93879c', fg='white')
-        heading.pack(pady=(30, 30))
+        heading.pack(pady=(10, 20))
         heading.configure(font=('verdana', 24, 'bold'))
 
         label0 = Label(self.root, text='Enter text ', bg='#93879c', fg='white')
         label0.pack(pady=(10, 10))
         label0.configure(font=('verdana', 17, 'bold'))
+
+    def do_senti_analysis(self):
+        response = self.api_obj.sentiment_anlys(self.sentiment_text.get())
+        sentiment_analysis_results = []
+        for label_info in response['scored_labels']:
+            label = label_info['label']
+            score = label_info['score']
+            sentiment_analysis_results.append(f"{label}: {score:.6f}")
+
+    # Joining all results into a single string to display or use further
+        results_string = "\n".join(sentiment_analysis_results)
+        print(results_string)
+        self.sentiment_result['text'] = results_string
 
 
 nlp = NLPApp()
